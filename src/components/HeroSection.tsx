@@ -1620,7 +1620,7 @@ export function HeroSection({ onNavigate }: HeroSectionProps) {
           >
             <div data-gsap="hero-stat">
               <p className="font-display text-2xl sm:text-3xl font-bold text-[#241f2e] tabular-nums">
-                <CountUp from={2000} to={2013} />
+                desde <CountUp from={2000} to={2013} />
               </p>
               <p className="mt-1 text-sm text-[#5c5868]">
                 De história e festas realizadas em Salvador e região
