@@ -1,0 +1,8 @@
+{
+  "name": "JPA Eventos BA — Festas Infantis, Lanches e Recreação em Salvador",
+  "description": "Há 13 anos realizando festas infantis, recreação com Estrepolia das Cais, brinquedos, barracas de lanches ao vivo, equipe de serviço e arcos de balões em Salvador, Bahia.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
