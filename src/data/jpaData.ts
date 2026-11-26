@@ -93,6 +93,7 @@ export const BRAND_IMAGES = {
   lanchesHotDog: '/assets/aistudio/images_9e21a35b.jpg',
   lanchesChurros: '/src/assets/images/churros_sem_marca_1795702069812.jpg',
   lanchesPastel: '/src/assets/images/pastel_frito_real.jpg',
+  lanchesAcai: '/src/assets/images/acai_real_foto.jpg',
   animacao: '/src/assets/images/pintura_artistica_natural_1795700243663.jpg',
   pulaPulaReal: '/assets/aistudio/WhatsApp_Image_2026-11-25_at_13.38.43__1__78b0bc4d.jpeg',
   piscinaBolinhasReal: '/src/assets/images/piscina_bolinhas_limpa_1795698832116.jpg',
@@ -280,6 +281,11 @@ export const SERVICE_CATEGORIES: CategoryMeta[] = [
       {
         src: BRAND_IMAGES.lanchesPastel,
         alt: 'Pastel brasileiro frito na hora com massa dourada, sequinha e crocante servido no prato',
+        objectPosition: 'object-center',
+      },
+      {
+        src: BRAND_IMAGES.lanchesAcai,
+        alt: 'Açaí cremoso servido com granola, banana em rodelas, morango e leite em pó',
         objectPosition: 'object-center',
       },
     ],
@@ -620,8 +626,8 @@ export const SERVICES_CATALOG: ServiceItem[] = [
     unitLabel: 'estação',
     images: [
       {
-        src: BRAND_IMAGES.lanchesReal2,
-        alt: 'Estação ao vivo da JPA Eventos BA montada com frutas frescas decoradas e acompanhamentos',
+        src: BRAND_IMAGES.lanchesAcai,
+        alt: 'Açaí cremoso servido com granola, banana em rodelas, morango e leite em pó',
         objectPosition: 'object-center',
       },
     ],
