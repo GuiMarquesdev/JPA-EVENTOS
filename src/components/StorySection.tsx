@@ -253,38 +253,38 @@ export function StorySection({ onNavigate }: StorySectionProps) {
             <div className="lg:col-span-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="relative rounded-[24px] overflow-hidden border border-[#f3d9e6]/20 bg-[#241f2e] aspect-[4/5]">
                 <SafeImage
-                  src="/src/assets/images/hero_slide_1.jpg"
-                  alt="Tia K1 e equipe da Estripulia das Kas caracterizadas ao lado da mesa do bolo em festa infantil"
-                  className="w-full h-full object-cover object-[50%_38%]"
-                  fallbackTitle="Estripulia das Kas · Tia K1"
+                  src="/assets/aistudio/WhatsApp_Image_2026-11-27_at_09.37.37_33e4dc5b.jpeg"
+                  alt="Tia K1 e equipe da Estripulia das Kas junto com Paulo e a equipe da JPA Eventos BA com malas rosa antes da festa"
+                  className="w-full h-full object-cover object-[50%_20%]"
+                  fallbackTitle="Estripulia das Kas + JPA Eventos BA"
                 />
                 <div
                   aria-hidden="true"
                   className="absolute inset-0 bg-gradient-to-t from-[#241f2e]/85 via-transparent to-transparent"
                 />
                 <div className="absolute bottom-0 inset-x-0 p-4">
-                  <p className="text-[11px] font-semibold text-[#f58fc0]">@estripuliadaskas</p>
+                  <p className="text-[11px] font-semibold text-[#f58fc0]">@estripuliadaskas + JPA</p>
                   <p className="mt-0.5 font-display text-sm font-bold text-white">
-                    Tia K1 e animadoras caracterizadas
+                    Parceria unida em cada evento
                   </p>
                 </div>
               </div>
 
               <div className="relative rounded-[24px] overflow-hidden border border-[#f3d9e6]/20 bg-[#241f2e] aspect-[4/5]">
                 <SafeImage
-                  src="/src/assets/images/hero_slide_6.jpg"
-                  alt="Animadora da Estripulia das Kas conduzindo brincadeira com chuva de espuma em festa infantil em Salvador"
-                  className="w-full h-full object-cover object-[32%_45%]"
-                  fallbackTitle="Chuva de Espuma · Estripulia das Kas"
+                  src="/assets/aistudio/WhatsApp_Image_2026-11-27_at_09.37.36_b6575f32.jpeg"
+                  alt="Tia K1 da Estripulia das Kas sorrindo caracterizada em festa infantil com cenário ABC e balões coloridos"
+                  className="w-full h-full object-cover object-[50%_22%]"
+                  fallbackTitle="Tia K1 · Estripulia das Kas"
                 />
                 <div
                   aria-hidden="true"
                   className="absolute inset-0 bg-gradient-to-t from-[#241f2e]/85 via-transparent to-transparent"
                 />
                 <div className="absolute bottom-0 inset-x-0 p-4">
-                  <p className="text-[11px] font-semibold text-[#6ec6e3]">Recreação ao Vivo</p>
+                  <p className="text-[11px] font-semibold text-[#6ec6e3]">Tia K1 · Estripulia das Kas</p>
                   <p className="mt-0.5 font-display text-sm font-bold text-white">
-                    Chuva de espuma, dança e gincanas
+                    Animação, Fit Dance Kids e alegria
                   </p>
                 </div>
               </div>
