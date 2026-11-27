@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Check, ChevronLeft, ChevronRight, Maximize2, Plus, Search, SlidersHorizontal } from 'lucide-react';
+import { Check, ChevronLeft, ChevronRight, ExternalLink, Maximize2, Plus, Search, SlidersHorizontal } from 'lucide-react';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import {
   SERVICE_CATEGORIES,
@@ -177,6 +177,22 @@ export function CatalogSection({
               <p className="mt-3 text-sm sm:text-base text-[#5c5868] leading-relaxed">
                 {activeCategoryMeta.description}
               </p>
+              {activeCategoryMeta.id === 'animacao' && (
+                <div className="mt-4 flex flex-wrap items-center gap-4">
+                  <a
+                    href={SOCIAL_LINKS.estripuliaInstagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#f26b9e] hover:text-[#241f2e] transition-colors"
+                  >
+                    Ver @estripuliadaskas no Instagram
+                    <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
+                  </a>
+                  <span className="text-xs text-[#8b8691]">
+                    Tia K1 · Fit Dance Kids · Pintura Artística · Chuva de Espuma
+                  </span>
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -229,6 +245,17 @@ export function CatalogSection({
                         <p className="mt-1.5 text-sm sm:text-base text-[#5c5868]">
                           {cat.description}
                         </p>
+                        {cat.id === 'animacao' && (
+                          <a
+                            href={SOCIAL_LINKS.estripuliaInstagram}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="mt-2 inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#f26b9e] hover:text-[#241f2e] transition-colors"
+                          >
+                            Acompanhar @estripuliadaskas no Instagram (Tia K1 · Fit Dance Kids)
+                            <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
+                          </a>
+                        )}
                       </div>
                       <button
                         type="button"

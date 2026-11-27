@@ -1,3 +1,11 @@
+import {
+  OWNER_WHATSAPP_DIGITS,
+  buildWhatsAppUrl,
+  openWhatsAppWithMessage,
+} from '../config/whatsapp';
+
+export { OWNER_WHATSAPP_DIGITS, buildWhatsAppUrl, openWhatsAppWithMessage };
+
 export type ServiceCategoryId =
   | 'animacao'
   | 'brinquedos'
@@ -115,63 +123,37 @@ export const BRAND_IMAGES = {
 
 export const HERO_CAROUSEL_SLIDES = [
   {
-    src: BRAND_IMAGES.heroReal1,
+    src: '/src/assets/images/hero_slide_1.jpg',
     alt: 'Recreadoras e animadoras da JPA Eventos BA caracterizadas ao lado da mesa do bolo com balões rosa em Salvador',
-    objectPosition: 'object-[50%_38%]',
+    objectPosition: 'object-[50%_42%]',
   },
   {
-    src: BRAND_IMAGES.equipeAventalRosa1,
-    alt: 'Equipe completa da JPA Eventos BA uniformizada com aventais rosa e animadora pronta para iniciar a festa em Salvador',
-    objectPosition: 'object-[50%_45%]',
-  },
-  {
-    src: BRAND_IMAGES.heroReal2,
+    src: '/src/assets/images/hero_slide_3.jpg',
     alt: 'Profissional da JPA Eventos BA operando barraca de pipoca com placa #JPAEventos e cenário temático infantil',
-    objectPosition: 'object-[50%_35%]',
+    objectPosition: 'object-[50%_34%]',
   },
   {
-    src: BRAND_IMAGES.equipeSelfieSalao,
-    alt: 'Fundadora e equipe de garçons e copeira da JPA Eventos BA em salão decorado com máquina de algodão doce ao fundo',
-    objectPosition: 'object-[50%_25%]',
-  },
-  {
-    src: BRAND_IMAGES.heroReal3,
-    alt: 'Atendimento da JPA Eventos BA servindo sorvete em evento corporativo e de hotel para equipe uniformizada em Salvador',
-    objectPosition: 'object-[50%_35%]',
-  },
-  {
-    src: BRAND_IMAGES.heroReal4,
-    alt: 'Animadora fazendo brincadeira com chuva de espuma e crianças comemorando ao lado do pula-pula da JPA Eventos BA',
+    src: BRAND_IMAGES.lanchesReal2,
+    alt: 'Estação ao vivo da JPA Eventos BA montada com frutas frescas decoradas, canudos coloridos e coqueteleiras',
     objectPosition: 'object-center',
   },
   {
-    src: BRAND_IMAGES.acaoLoja,
-    alt: 'Atendimento da JPA Eventos BA em ação promocional de loja com equipe comercial em Salvador',
-    objectPosition: 'object-[50%_22%]',
-  },
-  {
-    src: BRAND_IMAGES.heroReal5,
+    src: '/src/assets/images/hero_slide_8.jpg',
     alt: 'Crianças se divertindo na fila do tobogã inflável da JPA Eventos BA em festa comunitária em Salvador',
-    objectPosition: 'object-[50%_46%]',
+    objectPosition: 'object-[50%_48%]',
   },
 ] as const;
 
-export const WHATSAPP_NUMBER = '5571999990000';
-export const WHATSAPP_DISPLAY = '(71) 99999-0000';
-
 export const SOCIAL_LINKS = {
-  whatsapp: `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+  whatsapp: buildWhatsAppUrl(
     'Olá! Vim pelo site da JPA Eventos BA e gostaria de solicitar um orçamento para meu evento em Salvador.'
-  )}`,
+  ),
   instagram: 'https://www.instagram.com/jpaeventosba',
+  estripuliaInstagram: 'https://www.instagram.com/estripuliadaskas?fqnt=ZDdvMXFrbDhzdDA2',
   facebook: 'https://www.facebook.com/jpaeventosba',
   tiktok: 'https://www.tiktok.com/@jpaeventosba',
   google: 'https://www.google.com/search?q=JPA+Eventos+BA+Salvador+avaliacoes',
 };
-
-export function buildWhatsAppUrl(message: string): string {
-  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-}
 
 export function getProductWhatsAppUrl(productName: string, categoryLabel?: string): string {
   const categoryPart = categoryLabel ? ` (${categoryLabel})` : '';
@@ -188,29 +170,14 @@ export const SERVICE_CATEGORIES: CategoryMeta[] = [
     shortLabel: 'Animação',
     headline: 'Alegria conduzida por quem entende de criança há 7 anos',
     description:
-      'Parceria consolidada há sete anos com a Estrepolia das Cais / Ascais, referência em recreação infantil em Salvador, unindo pais e filhos em brincadeiras inesquecíveis.',
-    image: BRAND_IMAGES.animacao,
-    imageAlt: 'Animadora da JPA Eventos BA fazendo pintura artística no rosto de uma criança com pula-pula ao fundo',
+      'Parceria consolidada há sete anos com a Estripulia das Kas (@estripuliadaskas), comandada pela Tia K1 em Salvador: recreação infantil, Fit Dance Kids, pintura artística e chuva de espuma unindo pais e filhos.',
+    image: '/src/assets/images/recreacao_pintura_externa.jpg',
+    imageAlt: 'Recreadora caracterizada realizando pintura facial infantil ao ar livre em mesa colorida',
     gallery: [
       {
-        src: BRAND_IMAGES.animacao,
-        alt: 'Animadora caracterizada da JPA Eventos BA fazendo pintura artística no rosto de uma criança com o pula-pula ao fundo',
-        objectPosition: 'object-[50%_38%]',
-      },
-      {
-        src: BRAND_IMAGES.heroReal1,
-        alt: 'Recreadoras e animadoras da JPA Eventos BA caracterizadas ao lado da mesa do bolo em Salvador',
-        objectPosition: 'object-[50%_35%]',
-      },
-      {
-        src: BRAND_IMAGES.heroReal4,
-        alt: 'Animadora fazendo brincadeira com chuva de espuma e crianças comemorando ao lado do pula-pula',
-        objectPosition: 'object-center',
-      },
-      {
-        src: BRAND_IMAGES.equipeAventalRosa2,
-        alt: 'Animadora junto com a equipe uniformizada da JPA Eventos BA pronta para receber os convidados',
-        objectPosition: 'object-[50%_46%]',
+        src: '/src/assets/images/recreacao_pintura_externa.jpg',
+        alt: 'Recreadora caracterizada realizando pintura facial infantil ao ar livre em mesa colorida',
+        objectPosition: 'object-[50%_22%]',
       },
     ],
   },
@@ -222,23 +189,13 @@ export const SERVICE_CATEGORIES: CategoryMeta[] = [
     headline: 'Diversão segura do nosso xodó 1x1m ao pula-pula',
     description:
       'Brinquedos higienizados, revisados e montados com pontualidade. Nossa piscina de bolinhas 1x1m alta acompanha a história da JPA desde os primeiros eventos.',
-    image: BRAND_IMAGES.pulaPulaReal,
-    imageAlt: 'Pula-pula colorido da JPA Eventos BA com rede de proteção montado ao ar livre sob bandeirolas em Salvador',
+    image: '/src/assets/images/brinquedos_mar_bolinhas.jpg',
+    imageAlt: 'Área recreativa infantil com piscina cheia de bolinhas coloridas e escorregadores',
     gallery: [
       {
-        src: BRAND_IMAGES.pulaPulaReal,
-        alt: 'Pula-pula colorido da JPA Eventos BA com rede de proteção montado para festa em Salvador',
-        objectPosition: 'object-[50%_52%]',
-      },
-      {
-        src: BRAND_IMAGES.piscinaBolinhasReal,
-        alt: 'Piscina de bolinhas 1x1m alta colorida com rede de proteção da JPA Eventos BA',
+        src: '/src/assets/images/brinquedos_mar_bolinhas.jpg',
+        alt: 'Área recreativa infantil com piscina cheia de bolinhas coloridas e escorregadores',
         objectPosition: 'object-center',
-      },
-      {
-        src: BRAND_IMAGES.heroReal5,
-        alt: 'Crianças brincando no tobogã inflável da JPA Eventos BA em festa em Salvador',
-        objectPosition: 'object-[50%_46%]',
       },
     ],
   },
@@ -254,38 +211,8 @@ export const SERVICE_CATEGORIES: CategoryMeta[] = [
     imageAlt: 'Operador da JPA Eventos BA preparando algodão doce azul ao vivo na máquina sobre barraca de madeira',
     gallery: [
       {
-        src: BRAND_IMAGES.lanchesReal1,
-        alt: 'Operador da JPA Eventos BA preparando algodão doce azul ao vivo na máquina sobre barraca de madeira',
-        objectPosition: 'object-[50%_30%]',
-      },
-      {
-        src: BRAND_IMAGES.lanchesChurros,
-        alt: 'Bandeja com churros artesanais recheados com doce de leite em caixinhas individuais pela JPA Eventos BA',
-        objectPosition: 'object-center',
-      },
-      {
-        src: BRAND_IMAGES.lanchesReal2,
-        alt: 'Estação ao vivo da JPA Eventos BA montada com frutas frescas decoradas, canudos coloridos e coqueteleiras',
-        objectPosition: 'object-center',
-      },
-      {
-        src: BRAND_IMAGES.lanchesReal3,
-        alt: 'Máquina de pipoca da JPA Eventos BA com pipoca estourada na hora e saquinhos listrados rosa e branco',
-        objectPosition: 'object-[50%_62%]',
-      },
-      {
-        src: BRAND_IMAGES.lanchesReal4,
-        alt: 'Crepe suíço no palito assado na hora pela equipe da JPA Eventos BA',
-        objectPosition: 'object-[50%_56%]',
-      },
-      {
-        src: BRAND_IMAGES.lanchesPastel,
-        alt: 'Pastel brasileiro frito na hora com massa dourada, sequinha e crocante servido no prato',
-        objectPosition: 'object-center',
-      },
-      {
-        src: BRAND_IMAGES.lanchesAcai,
-        alt: 'Açaí cremoso servido com granola, banana em rodelas, morango e leite em pó',
+        src: BRAND_IMAGES.lanches,
+        alt: 'Barracas de madeira da JPA Eventos BA servindo crepes, churros artesanais, pipoca e algodão doce ao vivo',
         objectPosition: 'object-center',
       },
     ],
@@ -301,11 +228,6 @@ export const SERVICE_CATEGORIES: CategoryMeta[] = [
     image: BRAND_IMAGES.equipe1,
     imageAlt: 'Equipe uniformizada da JPA Eventos BA com aventais rosa da marca em festa infantil decorada em Salvador',
     gallery: [
-      {
-        src: BRAND_IMAGES.equipe1,
-        alt: 'Equipe de garçons, garçonetes e copeira da JPA Eventos BA uniformizados com aventais rosa e gravata borboleta diante de painel decorado',
-        objectPosition: 'object-[50%_42%]',
-      },
       {
         src: BRAND_IMAGES.equipeAventalRosa1,
         alt: 'Equipe completa da JPA Eventos BA com aventais rosa e animadora em evento ao ar livre em Salvador',
@@ -350,33 +272,8 @@ export const SERVICE_CATEGORIES: CategoryMeta[] = [
     imageAlt: 'Arco de balões colorido em entrada de clínica em Salvador com carrinho de pipoca da JPA Eventos BA',
     gallery: [
       {
-        src: BRAND_IMAGES.baloes,
-        alt: 'Arco de balões colorido em entrada de clínica em Salvador com carrinho de pipoca da JPA Eventos BA',
-        objectPosition: 'object-[50%_38%]',
-      },
-      {
-        src: BRAND_IMAGES.arcoOrganico,
-        alt: 'Arco orgânico desconstruído com balões de tamanhos variados em tons de azul e branco',
-        objectPosition: 'object-[50%_38%]',
-      },
-      {
-        src: BRAND_IMAGES.arcoEspiral,
-        alt: 'Arco de balões em espiral roxo e branco montado para entrada de festa',
-        objectPosition: 'object-[50%_32%]',
-      },
-      {
-        src: BRAND_IMAGES.arcoBlocos,
-        alt: 'Arco de balões em blocos segmentados por cor em ambiente interno',
-        objectPosition: 'object-[50%_38%]',
-      },
-      {
-        src: BRAND_IMAGES.arcoSimples,
-        alt: 'Arco de balões simples azul e branco emoldurando entrada de evento',
-        objectPosition: 'object-[50%_38%]',
-      },
-      {
-        src: BRAND_IMAGES.paredaoBaloes,
-        alt: 'Paredão completo de balões coloridos em tons rosa e amarelo para fundo de fotos',
+        src: '/src/assets/images/baloes_arco_colorido_real.jpg',
+        alt: 'Arco colorido com balões vibrantes montado ao ar livre para entrada de evento',
         objectPosition: 'object-center',
       },
     ],
@@ -389,18 +286,29 @@ export const SERVICES_CATALOG: ServiceItem[] = [
     id: 'animacao-infantil',
     category: 'animacao',
     name: 'Animação de Festa Infantil',
-    subtitle: 'Com Estrepolia das Cais / Ascais · 7 anos de parceria',
+    subtitle: 'Com Estripulia das Kas (Tia K1) · 7 anos de parceria',
     description:
-      'Condução completa da festa com música, brincadeiras lúdicas, comandos divertidos e hora do parabéns conduzida com energia e carinho.',
-    highlights: ['Repertório adaptado por faixa etária', 'Equipe experiente há 7 anos', 'Ritmo envolvente do início ao fim'],
+      'Condução completa da festa com a equipe da @estripuliadaskas: Fit Dance Kids, coreografias musicais, chuva de espuma/neve, comandos divertidos e hora do parabéns cheia de energia.',
+    highlights: [
+      'Fit Dance Kids e coreografias animadas',
+      'Chuva de espuma / neve e brincadeiras',
+      'Equipe de animadores e recreadores há 7 anos',
+    ],
     idealFor: 'Aniversários em casa, condomínios, escolas e hotéis',
     unitLabel: 'equipe',
+    images: [
+      {
+        src: '/src/assets/images/hero_slide_6.jpg',
+        alt: 'Animadora da JPA Eventos BA conduzindo brincadeira com chuva de espuma e crianças se divertindo em festa infantil',
+        objectPosition: 'object-[32%_45%]',
+      },
+    ],
   },
   {
     id: 'pintura-artistica',
     category: 'animacao',
     name: 'Pintura Artística',
-    subtitle: 'Tintas hipoalergênicas · Traços criativos na hora',
+    subtitle: 'Estripulia das Kas · Tintas hipoalergênicas na hora',
     description:
       'Transformação mágica com borboletas, super-heróis, flores e personagens feitos com pincel fino e tintas seguras para a pele infantil.',
     highlights: ['Tinta antialérgica lavável', 'Modelos rápidos para filas fluírem', 'Atendimento paciente e carinhoso'],
@@ -424,6 +332,13 @@ export const SERVICES_CATALOG: ServiceItem[] = [
     highlights: ['Desafios em dupla pai e filho', 'Linguagem acolhedora e inclusiva', 'Clima leve sem constrangimentos'],
     idealFor: 'Festas familiares, Dia das Crianças e confraternizações',
     unitLabel: 'bloco',
+    images: [
+      {
+        src: '/src/assets/images/interacao_pais_costas_1795781659870.jpg',
+        alt: 'Pais e crianças vistos de costas de mãos dadas em brincadeira de roda em festa infantil no quintal',
+        objectPosition: 'object-[50%_46%]',
+      },
+    ],
   },
   {
     id: 'gincanas',
@@ -435,6 +350,13 @@ export const SERVICES_CATALOG: ServiceItem[] = [
     highlights: ['Materiais próprios higienizados', 'Seguro para espaços abertos ou salões', 'Premiação simbólica divertida'],
     idealFor: 'Crianças de 4 a 12 anos, colônias e eventos escolares',
     unitLabel: 'bloco',
+    images: [
+      {
+        src: '/src/assets/images/gincanas_equipamentos_1795781618939.jpg',
+        alt: 'Bambolês coloridos, cones, sacos de corrida de saco e corda preparados no gramado para gincanas infantis',
+        objectPosition: 'object-[50%_58%]',
+      },
+    ],
   },
 
   // 02. Brinquedos
@@ -485,6 +407,13 @@ export const SERVICES_CATALOG: ServiceItem[] = [
     highlights: ['Material plástico atóxico firme', 'Fácil posicionamento interno ou externo', 'Combina com a piscina de bolinhas'],
     idealFor: 'Crianças de 1 a 6 anos',
     unitLabel: 'unidade',
+    images: [
+      {
+        src: '/src/assets/images/escorregador_real.jpg',
+        alt: 'Criança pronta para descer em escorregador infantil amarelo e azul com rede de proteção',
+        objectPosition: 'object-[50%_48%]',
+      },
+    ],
   },
   {
     id: 'gangorra',
@@ -496,6 +425,13 @@ export const SERVICES_CATALOG: ServiceItem[] = [
     highlights: ['Pegadores anatômicos seguros', 'Higienização antes da entrega', 'Perfeita para combos baby'],
     idealFor: 'Área baby em aniversários e creches',
     unitLabel: 'unidade',
+    images: [
+      {
+        src: '/src/assets/images/gangorra_real.jpg',
+        alt: 'Gangorra infantil dupla colorida com pegadores ergonômicos sobre grama',
+        objectPosition: 'object-[50%_46%]',
+      },
+    ],
   },
 
   // 03. Barracas de Lanches ao Vivo
@@ -851,7 +787,7 @@ export const STORY_CHAPTERS: StoryChapter[] = [
     index: 'Capítulo 04',
     period: '13 Anos · Superação na Pandemia e Grandes Hotéis',
     title: 'Queda total, reconstrução e a alegria de servir de quintais a grandes hotéis',
-    body: 'Com sete anos de parceria fiel com a animadora Estrepolia das Cais / Ascais, a empresa enfrentou dois anos duríssimos fechada na pandemia. Mesmo após perdas severas, reergueu-se com novos clientes que viraram amigos — hoje atendendo aniversários em casa, corporações, vereadores e grandes hotéis de Salvador. Porque viver de festa é um desafio todo santo dia.',
+    body: 'Com sete anos de parceria fiel com a turma da Estripulia das Kas (@estripuliadaskas), comandada pela animadora Tia K1, a empresa enfrentou dois anos duríssimos fechada na pandemia. Mesmo após perdas severas, reergueu-se com novos clientes que viraram amigos — hoje atendendo aniversários em casa, corporações, vereadores e grandes hotéis de Salvador. Porque viver de festa é um desafio todo santo dia.',
   },
 ];
 
@@ -873,8 +809,8 @@ export const GOOGLE_REVIEWS: GoogleReview[] = [
     eventType: 'Festa infantil em salão',
     dateLabel: 'Avaliação no Google · 1 mês atrás',
     rating: 5,
-    text: 'A animação com a Estrepolia das Cais (Ascais) foi a alma da festa! Fez pintura artística lindíssima e envolveu até os pais nas gincanas. Só elogios dos convidados pelo carinho e energia do início ao parabéns.',
-    highlightService: 'Animação · Pintura Artística · Gincanas',
+    text: 'A animação com a Estripulia das Kas (Tia K1) foi a alma da festa! Fez pintura artística lindíssima, Fit Dance Kids e envolveu até os pais nas gincanas. Só elogios dos convidados pelo carinho e energia do início ao parabéns.',
+    highlightService: 'Animação · Fit Dance Kids · Pintura Artística',
   },
   {
     id: 'rev-3',
@@ -950,9 +886,9 @@ export const FAQ_ITEMS: FaqItem[] = [
   {
     id: 'faq-5',
     category: 'Recreação',
-    question: 'Como funciona a animação infantil com a Estrepolia das Cais / Ascais?',
+    question: 'Como funciona a animação infantil com a Estripulia das Kas (@estripuliadaskas)?',
     answer:
-      'Temos 7 anos de parceria com a Ascais (Estrepolia das Cais), uma das animadoras mais queridas de Salvador. O pacote pode incluir pintura artística, gincanas, brincadeiras musicais, interação com pais e condução animada da hora do parabéns.',
+      'Temos 7 anos de parceria com a Estripulia das Kas, grupo liderado pela Tia K1 em Salvador com animadores, atores e recreadores. O pacote pode incluir Fit Dance Kids, coreografias musicais, pintura artística, gincanas, chuva de espuma/neve, interação com pais e condução animada da hora do parabéns.',
   },
   {
     id: 'faq-6',
@@ -990,7 +926,7 @@ export const TOOLCRAFT_PRESETS: EventPreset[] = [
   {
     id: 'preset-completo',
     title: 'Festa Infantil Completa',
-    subtitle: 'Animação com Ascais, brinquedos, lanches variados, garçom e arco orgânico',
+    subtitle: 'Animação com Estripulia das Kas, Fit Dance Kids, brinquedos, lanches, garçom e arco orgânico',
     eventType: 'Salão ou Condomínio',
     guests: 70,
     hours: 4,

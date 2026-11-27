@@ -1,14 +1,22 @@
 import { useEffect, useRef, useState } from 'react';
 import {
   ArrowRight,
+  ChevronLeft,
+  ChevronRight,
+  Images,
   Maximize2,
   SlidersHorizontal,
   Star,
 } from 'lucide-react';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
-import { BRAND_IMAGES, HERO_CAROUSEL_SLIDES, SOCIAL_LINKS } from '../data/jpaData';
+import { BRAND_IMAGES, SOCIAL_LINKS } from '../data/jpaData';
 import { SafeImage } from './SafeImage';
 import { ImageLightbox } from './ImageLightbox';
+import {
+  DEFAULT_HERO_SLIDES,
+  HeroCarouselManagerModal,
+  type HeroSlideOption,
+} from './HeroCarouselManagerModal';
 import { WhatsAppIcon } from './WhatsAppIcon';
 import { BlurText } from './reactbits/BlurText';
 import { RotatingText } from './reactbits/RotatingText';
@@ -17,6 +25,28 @@ import { TiltedCard } from './reactbits/TiltedCard';
 import { Magnet } from './reactbits/Magnet';
 import { gsap } from '../lib/gsap';
 import type { PageView } from './Navbar';
+
+const HERO_SLIDES_STORAGE_KEY = 'jpa_hero_carousel_slides_v3';
+
+function loadSavedHeroSlides(): HeroSlideOption[] {
+  if (typeof window === 'undefined') return DEFAULT_HERO_SLIDES;
+  try {
+    const raw = window.localStorage.getItem(HERO_SLIDES_STORAGE_KEY);
+    if (!raw) return DEFAULT_HERO_SLIDES;
+    const parsed = JSON.parse(raw) as unknown;
+    if (!Array.isArray(parsed) || parsed.length === 0) return DEFAULT_HERO_SLIDES;
+    const valid = parsed.filter(
+      (item): item is HeroSlideOption =>
+        Boolean(item) &&
+        typeof item === 'object' &&
+        typeof (item as HeroSlideOption).src === 'string' &&
+        typeof (item as HeroSlideOption).alt === 'string'
+    );
+    return valid.length > 0 ? valid : DEFAULT_HERO_SLIDES;
+  } catch {
+    return DEFAULT_HERO_SLIDES;
+  }
+}
 
 interface HeroSectionProps {
   onNavigate: (view: PageView) => void;
@@ -36,7 +66,7 @@ const HERO_STAGE_ACTS = [
     step: '01',
     label: 'Chegada & Alegria',
     badge: 'Ato 01 · Animação & Magia',
-    caption: 'Recreação conduzida com carinho há 7 anos para encantar crianças e envolver os pais.',
+    caption: 'Animação com a Estripulia das Kas (@estripuliadaskas): Fit Dance Kids, pintura artística e chuva de espuma.',
     slideIndex: 0,
   },
   {
@@ -45,15 +75,15 @@ const HERO_STAGE_ACTS = [
     label: 'Lanches & Brinquedos',
     badge: 'Ato 02 · Sabor & Brincadeira',
     caption: 'Pipoca, algodão doce, churros na hora e brinquedos higienizados montados no horário.',
-    slideIndex: 2,
+    slideIndex: 1,
   },
   {
     id: 'ato-3',
     step: '03',
-    label: 'Equipe & Eventos',
-    badge: 'Ato 03 · Confiança Completa',
-    caption: 'Equipe uniformizada de quintais em casa a grandes hotéis e ações comerciais em Salvador.',
-    slideIndex: 1,
+    label: 'Festa & Diversão',
+    badge: 'Ato 03 · Energia em Salvador',
+    caption: 'De quintais em casa a grandes festas, com recreação, brinquedos e estrutura completa.',
+    slideIndex: 3,
   },
 ] as const;
 
@@ -91,35 +121,67 @@ export function HeroSection({ onNavigate }: HeroSectionProps) {
   const floatChipBottomRef = useRef<HTMLDivElement>(null);
 
   const prefersReducedMotion = useReducedMotion();
+  const [slides, setSlides] = useState<HeroSlideOption[]>(loadSavedHeroSlides);
   const [slideIdx, setSlideIdx] = useState(0);
   const [slideDir, setSlideDir] = useState(1);
   const [activeActIdx, setActiveActIdx] = useState(0);
   const [isManualOverride, setIsManualOverride] = useState(false);
   const [isCarouselPaused, setIsCarouselPaused] = useState(false);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+  const [isManagerOpen, setIsManagerOpen] = useState(false);
+  const [storageWarning, setStorageWarning] = useState<string | null>(null);
 
   const manualOverrideRef = useRef(false);
   const activeActRef = useRef(0);
 
-  const safeSlideIdx = slideIdx % HERO_CAROUSEL_SLIDES.length;
-  const currentSlide = HERO_CAROUSEL_SLIDES[safeSlideIdx];
+  const safeSlideIdx = slides.length > 0 ? ((slideIdx % slides.length) + slides.length) % slides.length : 0;
+  const currentSlide = slides[safeSlideIdx] ?? DEFAULT_HERO_SLIDES[0];
   const currentAct = HERO_STAGE_ACTS[activeActIdx] ?? HERO_STAGE_ACTS[0];
 
   useEffect(() => {
-    HERO_CAROUSEL_SLIDES.forEach((slide) => {
+    slides.forEach((slide) => {
       const img = new Image();
       img.src = slide.src;
     });
-  }, []);
+  }, [slides]);
 
   useEffect(() => {
-    if (isCarouselPaused || isLightboxOpen || prefersReducedMotion || isManualOverride) return;
+    if (isCarouselPaused || isLightboxOpen || isManagerOpen || prefersReducedMotion || isManualOverride || slides.length <= 1) return;
     const timer = window.setTimeout(() => {
       setSlideDir(1);
-      setSlideIdx((prev) => (prev + 1) % HERO_CAROUSEL_SLIDES.length);
+      setSlideIdx((prev) => (prev + 1) % slides.length);
     }, 5500);
     return () => window.clearTimeout(timer);
-  }, [slideIdx, isCarouselPaused, isLightboxOpen, prefersReducedMotion, isManualOverride]);
+  }, [slideIdx, slides.length, isCarouselPaused, isLightboxOpen, isManagerOpen, prefersReducedMotion, isManualOverride]);
+
+  const handleUpdateSlides = (nextSlides: HeroSlideOption[]) => {
+    setSlides(nextSlides);
+    setStorageWarning(null);
+    try {
+      window.localStorage.setItem(HERO_SLIDES_STORAGE_KEY, JSON.stringify(nextSlides));
+    } catch {
+      setStorageWarning('As fotos foram aplicadas agora, mas o navegador atingiu o limite de armazenamento local para salvar muitas fotos enviadas.');
+    }
+  };
+
+  const handleResetDefaultSlides = () => {
+    setSlides(DEFAULT_HERO_SLIDES);
+    setSlideIdx(0);
+    setStorageWarning(null);
+    try {
+      window.localStorage.removeItem(HERO_SLIDES_STORAGE_KEY);
+    } catch {
+      // Ignore storage cleanup errors
+    }
+  };
+
+  const handleStepSlide = (delta: -1 | 1) => {
+    if (slides.length <= 1) return;
+    manualOverrideRef.current = true;
+    setIsManualOverride(true);
+    setSlideDir(delta);
+    setSlideIdx((prev) => (prev + delta + slides.length) % slides.length);
+  };
 
   const handleSelectAct = (actIndex: number) => {
     const act = HERO_STAGE_ACTS[actIndex];
@@ -128,8 +190,9 @@ export function HeroSection({ onNavigate }: HeroSectionProps) {
     setIsManualOverride(true);
     activeActRef.current = actIndex;
     setActiveActIdx(actIndex);
-    setSlideDir(act.slideIndex >= safeSlideIdx ? 1 : -1);
-    setSlideIdx(act.slideIndex);
+    const boundedSlide = act.slideIndex % slides.length;
+    setSlideDir(boundedSlide >= safeSlideIdx ? 1 : -1);
+    setSlideIdx(boundedSlide);
   };
 
   const handleLightboxIndexChange = (nextIdx: number) => {
@@ -1554,7 +1617,7 @@ export function HeroSection({ onNavigate }: HeroSectionProps) {
                 <div
                   ref={heroParallaxRef}
                   onClick={() => setIsLightboxOpen(true)}
-                  className="absolute inset-0 w-full h-full scale-[1.06] will-change-transform cursor-zoom-in"
+                  className="absolute inset-0 w-full h-full scale-[1.02] will-change-transform cursor-zoom-in"
                 >
                   <AnimatePresence initial={false} custom={slideDir} mode="popLayout">
                     <motion.div
@@ -1585,10 +1648,47 @@ export function HeroSection({ onNavigate }: HeroSectionProps) {
                   className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent pointer-events-none"
                 />
 
+                {slides.length > 1 && (
+                  <div
+                    onClick={(e) => e.stopPropagation()}
+                    className="absolute top-4 left-4 z-10 inline-flex items-center gap-1 p-1 bg-[#241f2e]/85 backdrop-blur-xs text-white rounded-[10px] border border-white/15"
+                  >
+                    <button
+                      type="button"
+                      onClick={() => handleStepSlide(-1)}
+                      aria-label="Foto anterior do carrossel"
+                      className="p-1 hover:bg-white/15 rounded-[7px] transition-colors cursor-pointer"
+                    >
+                      <ChevronLeft className="w-3.5 h-3.5" aria-hidden="true" />
+                    </button>
+                    <span className="px-1.5 font-mono text-[11px] tabular-nums">
+                      {safeSlideIdx + 1}/{slides.length}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => handleStepSlide(1)}
+                      aria-label="Próxima foto do carrossel"
+                      className="p-1 hover:bg-white/15 rounded-[7px] transition-colors cursor-pointer"
+                    >
+                      <ChevronRight className="w-3.5 h-3.5" aria-hidden="true" />
+                    </button>
+                  </div>
+                )}
+
                 <div
                   onClick={(e) => e.stopPropagation()}
                   className="absolute top-4 right-4 z-10 flex items-center gap-2"
                 >
+                  <button
+                    type="button"
+                    onClick={() => setIsManagerOpen(true)}
+                    aria-label="Escolher fotos do carrossel"
+                    title="Escolher ou enviar fotos do carrossel"
+                    className="inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-[#241f2e]/85 hover:bg-[#241f2e] backdrop-blur-xs text-white text-[11px] font-medium rounded-[10px] border border-white/15 transition-colors cursor-pointer"
+                  >
+                    <Images className="w-3.5 h-3.5 text-[#f58fc0]" aria-hidden="true" />
+                    <span>Escolher fotos</span>
+                  </button>
                   <button
                     type="button"
                     onClick={() => setIsLightboxOpen(true)}
@@ -1628,10 +1728,10 @@ export function HeroSection({ onNavigate }: HeroSectionProps) {
             </div>
             <div data-gsap="hero-stat">
               <p className="font-display text-2xl sm:text-3xl font-bold text-[#241f2e] tabular-nums">
-                <CountUp to={7} /> anos
+                desde <CountUp from={2005} to={2019} />
               </p>
               <p className="mt-1 text-sm text-[#5c5868]">
-                Com a animadora
+                Parceria com a Estripulia das Kas (Tia K1)
               </p>
             </div>
             <div data-gsap="hero-stat">
@@ -1665,11 +1765,27 @@ export function HeroSection({ onNavigate }: HeroSectionProps) {
 
       <ImageLightbox
         isOpen={isLightboxOpen}
-        images={[...HERO_CAROUSEL_SLIDES]}
+        images={slides}
         currentIndex={safeSlideIdx}
         onClose={() => setIsLightboxOpen(false)}
         onChangeIndex={handleLightboxIndexChange}
         title="Eventos JPA Eventos BA · Salvador"
+      />
+
+      <HeroCarouselManagerModal
+        isOpen={isManagerOpen}
+        slides={slides}
+        activeIndex={safeSlideIdx}
+        storageWarning={storageWarning}
+        onUpdateSlides={handleUpdateSlides}
+        onPreviewSlide={(idx) => {
+          manualOverrideRef.current = true;
+          setIsManualOverride(true);
+          setSlideDir(idx >= safeSlideIdx ? 1 : -1);
+          setSlideIdx(idx);
+        }}
+        onResetDefault={handleResetDefaultSlides}
+        onClose={() => setIsManagerOpen(false)}
       />
     </section>
   );

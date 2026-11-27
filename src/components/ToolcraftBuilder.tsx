@@ -1,6 +1,8 @@
-import { useMemo, useState } from 'react';
+import { type FormEvent, useMemo, useState } from 'react';
 import {
+  AlertCircle,
   Check,
+  CheckCircle2,
   Copy,
   Minus,
   Plus,
@@ -15,6 +17,7 @@ import {
   SERVICES_CATALOG,
   TOOLCRAFT_PRESETS,
   buildWhatsAppUrl,
+  openWhatsAppWithMessage,
   type ServiceCategoryId,
 } from '../data/jpaData';
 
@@ -40,6 +43,7 @@ export function ToolcraftBuilder({
   onResetAll,
 }: ToolcraftBuilderProps) {
   const [clientName, setClientName] = useState('');
+  const [clientPhone, setClientPhone] = useState('');
   const [eventType, setEventType] = useState('Aniversário Infantil');
   const [neighborhood, setNeighborhood] = useState(SALVADOR_NEIGHBORHOODS[0]);
   const [eventDate, setEventDate] = useState('');
@@ -48,6 +52,9 @@ export function ToolcraftBuilder({
   const [balloonColors, setBalloonColors] = useState(BALLOON_PALETTES[0]);
   const [notes, setNotes] = useState('');
   const [activeCatTab, setActiveCatTab] = useState<ServiceCategoryId>('animacao');
+  const [formError, setFormError] = useState<string | null>(null);
+  const [submitted, setSubmitted] = useState(false);
+  const [submittedMessage, setSubmittedMessage] = useState('');
   const [copied, setCopied] = useState(false);
 
   const selectedItems = useMemo(() => {
@@ -75,42 +82,26 @@ export function ToolcraftBuilder({
   );
 
   const whatsappSummaryText = useMemo(() => {
-    const lines: string[] = [
-      'Olá, equipe JPA Eventos BA! Montei o roteiro do meu evento no site:',
+    const selectedServiceLabels = selectedItems.map((item) => `${item.qty}x ${item.name}`);
+
+    return [
+      '*NOVO ROTEIRO DE FESTA / ORÇAMENTO*',
       '',
-      `• *Solicitante:* ${clientName.trim() || 'A informar'}`,
-      `• *Tipo de evento:* ${eventType}`,
-      `• *Bairro em Salvador:* ${neighborhood}`,
-      `• *Data pretendida:* ${eventDate || 'A definir'}`,
-      `• *Convidados estimados:* ${guests} pessoas`,
-      `• *Duração:* ${hours} horas`,
-      '',
-      '*Itens selecionados:*',
-    ];
-
-    if (selectedItems.length === 0) {
-      lines.push('• Ainda escolhendo — preciso de sugestão de pacote.');
-    } else {
-      for (const item of selectedItems) {
-        lines.push(`• ${item.qty}x ${item.name}`);
-      }
-    }
-
-    if (hasBalloonSelected) {
-      lines.push('');
-      lines.push(`• *Paleta dos balões:* ${balloonColors}`);
-    }
-
-    if (notes.trim()) {
-      lines.push(`• *Observações:* ${notes.trim()}`);
-    }
-
-    lines.push('');
-    lines.push('Poderiam me enviar o orçamento detalhado e disponibilidade?');
-    return lines.join('\n');
+      `- Nome ou empresa: ${clientName.trim() || '-'}`,
+      `- WhatsApp: ${clientPhone.trim() || '-'}`,
+      `- Formato do evento: ${eventType || '-'}`,
+      `- Bairro em Salvador / Região: ${neighborhood || '-'}`,
+      `- Data pretendida: ${eventDate || '-'}`,
+      `- Convidados estimados: ${guests} pessoas`,
+      `- Duração da festa: ${hours} horas`,
+      `- Serviços selecionados: ${selectedServiceLabels.length ? selectedServiceLabels.join(', ') : '-'}`,
+      `- Paleta dos balões: ${hasBalloonSelected ? balloonColors : '-'}`,
+      `- Observações: ${notes.trim() || '-'}`,
+    ].join('\n');
   }, [
     balloonColors,
     clientName,
+    clientPhone,
     eventDate,
     eventType,
     guests,
@@ -121,14 +112,16 @@ export function ToolcraftBuilder({
     selectedItems,
   ]);
 
+  const activeMessage = submitted ? submittedMessage : whatsappSummaryText;
+
   const whatsappUrl = useMemo(
-    () => buildWhatsAppUrl(whatsappSummaryText),
-    [whatsappSummaryText]
+    () => buildWhatsAppUrl(activeMessage),
+    [activeMessage]
   );
 
   const handleCopyBrief = async () => {
     try {
-      await navigator.clipboard.writeText(whatsappSummaryText.replace(/\*/g, ''));
+      await navigator.clipboard.writeText(activeMessage);
       setCopied(true);
       window.setTimeout(() => setCopied(false), 2500);
     } catch {
@@ -136,10 +129,26 @@ export function ToolcraftBuilder({
     }
   };
 
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+
+    if (!clientName.trim() || !clientPhone.trim()) {
+      setFormError('Preencha seu nome e WhatsApp para enviarmos o roteiro.');
+      return;
+    }
+
+    setFormError(null);
+    openWhatsAppWithMessage(whatsappSummaryText);
+    setSubmittedMessage(whatsappSummaryText);
+    setSubmitted(true);
+    setCopied(false);
+  };
+
   const handlePresetClick = (preset: (typeof TOOLCRAFT_PRESETS)[number]) => {
     setEventType(preset.eventType);
     setGuests(preset.guests);
     setHours(preset.hours);
+    setSubmitted(false);
     onApplyPreset(preset.itemIds);
   };
 
@@ -202,8 +211,12 @@ export function ToolcraftBuilder({
           </div>
         </div>
 
-        {/* Main 12-Col Toolcraft Workspace */}
-        <div className="mt-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        {/* Main 12-Col Toolcraft Workspace Form */}
+        <form
+          onSubmit={handleSubmit}
+          noValidate
+          className="mt-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start"
+        >
           {/* Left 7 Cols: Step 1 Event Info + Step 2 Service Selector */}
           <div className="lg:col-span-7 space-y-8">
             {/* Step 01: Dados do Evento */}
@@ -218,14 +231,41 @@ export function ToolcraftBuilder({
                     htmlFor="tc-name"
                     className="block text-xs font-semibold text-[#5c5868] mb-1.5"
                   >
-                    Seu nome ou empresa
+                    Seu nome ou empresa <span className="text-[#f26b9e]">*</span>
                   </label>
                   <input
                     id="tc-name"
                     type="text"
+                    required
                     value={clientName}
-                    onChange={(e) => setClientName(e.target.value)}
+                    onChange={(e) => {
+                      setClientName(e.target.value);
+                      if (formError) setFormError(null);
+                      if (submitted) setSubmitted(false);
+                    }}
                     placeholder="Ex: Maria Clara / Hotel Orla"
+                    className="w-full px-3.5 py-2.5 text-sm bg-[#fffbfa] border border-[#f3d9e6] rounded-[12px] text-[#241f2e] focus:outline-none focus:ring-2 focus:ring-[#f58fc0]"
+                  />
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="tc-phone"
+                    className="block text-xs font-semibold text-[#5c5868] mb-1.5"
+                  >
+                    Seu WhatsApp (com DDD) <span className="text-[#f26b9e]">*</span>
+                  </label>
+                  <input
+                    id="tc-phone"
+                    type="tel"
+                    required
+                    value={clientPhone}
+                    onChange={(e) => {
+                      setClientPhone(e.target.value);
+                      if (formError) setFormError(null);
+                      if (submitted) setSubmitted(false);
+                    }}
+                    placeholder="Ex: (71) 99999-9999"
                     className="w-full px-3.5 py-2.5 text-sm bg-[#fffbfa] border border-[#f3d9e6] rounded-[12px] text-[#241f2e] focus:outline-none focus:ring-2 focus:ring-[#f58fc0]"
                   />
                 </div>
@@ -463,7 +503,7 @@ export function ToolcraftBuilder({
                   rows={2}
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
-                  placeholder="Ex: Tema Fundo do Mar, salão no 2º andar sem elevador, preferência pela Ascais..."
+                  placeholder="Ex: Tema Fundo do Mar, salão no 2º andar sem elevador, incluir Fit Dance Kids com a Estripulia das Kas..."
                   className="w-full px-3.5 py-2.5 text-sm bg-[#fffbfa] border border-[#f3d9e6] rounded-[12px] text-[#241f2e] focus:outline-none focus:ring-2 focus:ring-[#f58fc0]"
                 />
               </div>
@@ -554,38 +594,101 @@ export function ToolcraftBuilder({
               </div>
             )}
 
-            {/* Primary Actions */}
+            {/* Primary Actions / Confirmation State */}
             <div className="mt-6 space-y-3">
-              <a
-                href={whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full inline-flex items-center justify-center gap-2 px-5 py-3.5 text-sm font-semibold text-white bg-[#25d366] hover:bg-[#1aa34f] rounded-[22px] transition-colors"
-              >
-                <WhatsAppIcon className="w-4 h-4" />
-                Enviar Roteiro no WhatsApp
-              </a>
+              {formError && (
+                <div
+                  role="alert"
+                  className="flex items-start gap-2 p-3 rounded-[14px] bg-[#f26b9e]/15 border border-[#f26b9e]/50 text-xs text-[#ffe6f0]"
+                >
+                  <AlertCircle className="w-4 h-4 text-[#f58fc0] shrink-0 mt-0.5" aria-hidden="true" />
+                  <span>{formError}</span>
+                </div>
+              )}
 
-              <button
-                type="button"
-                onClick={handleCopyBrief}
-                className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 text-xs font-semibold text-[#fffbfa] bg-[#241f2e] hover:bg-[#241f2e]/80 border border-[#f3d9e6]/30 rounded-[22px] transition-colors cursor-pointer"
-              >
-                {copied ? (
-                  <>
-                    <Check className="w-4 h-4 text-[#6ec6e3]" aria-hidden="true" />
-                    Resumo copiado para a área de transferência
-                  </>
-                ) : (
-                  <>
-                    <Copy className="w-4 h-4" aria-hidden="true" />
-                    Copiar Lista do Orçamento
-                  </>
-                )}
-              </button>
+              {submitted ? (
+                <div className="p-4 rounded-[22px] bg-[#25d366]/12 border border-[#25d366]/40 space-y-3">
+                  <div className="flex items-start gap-2.5">
+                    <CheckCircle2 className="w-5 h-5 text-[#25d366] shrink-0 mt-0.5" aria-hidden="true" />
+                    <div>
+                      <p className="text-sm font-bold text-white">
+                        WhatsApp aberto com os dados preenchidos
+                      </p>
+                      <p className="mt-1 text-xs text-[#f3d9e6] leading-relaxed">
+                        Caso a janela do WhatsApp não tenha aberto automaticamente no seu navegador,
+                        use os botões abaixo para concluir ou copiar suas respostas.
+                      </p>
+                    </div>
+                  </div>
+
+                  <a
+                    href={whatsappUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full inline-flex items-center justify-center gap-2 px-5 py-3.5 text-sm font-semibold text-white bg-[#25d366] hover:bg-[#1aa34f] rounded-[22px] transition-colors"
+                  >
+                    <WhatsAppIcon className="w-4 h-4" />
+                    Enviar no WhatsApp
+                  </a>
+
+                  <button
+                    type="button"
+                    onClick={handleCopyBrief}
+                    className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 text-xs font-semibold text-[#fffbfa] bg-[#241f2e] hover:bg-[#241f2e]/80 border border-[#f3d9e6]/30 rounded-[22px] transition-colors cursor-pointer"
+                  >
+                    {copied ? (
+                      <>
+                        <Check className="w-4 h-4 text-[#6ec6e3]" aria-hidden="true" />
+                        Respostas copiadas!
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-4 h-4" aria-hidden="true" />
+                        Copiar Respostas
+                      </>
+                    )}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setSubmitted(false)}
+                    className="w-full text-center text-xs text-[#f3d9e6]/80 hover:text-white underline underline-offset-2 pt-1 cursor-pointer"
+                  >
+                    Alterar dados do roteiro
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <button
+                    type="submit"
+                    className="w-full inline-flex items-center justify-center gap-2 px-5 py-3.5 text-sm font-semibold text-white bg-[#25d366] hover:bg-[#1aa34f] rounded-[22px] transition-colors cursor-pointer"
+                  >
+                    <WhatsAppIcon className="w-4 h-4" />
+                    Enviar Roteiro no WhatsApp
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleCopyBrief}
+                    className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 text-xs font-semibold text-[#fffbfa] bg-[#241f2e] hover:bg-[#241f2e]/80 border border-[#f3d9e6]/30 rounded-[22px] transition-colors cursor-pointer"
+                  >
+                    {copied ? (
+                      <>
+                        <Check className="w-4 h-4 text-[#6ec6e3]" aria-hidden="true" />
+                        Respostas copiadas!
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-4 h-4" aria-hidden="true" />
+                        Copiar Respostas
+                      </>
+                    )}
+                  </button>
+                </>
+              )}
             </div>
           </div>
-        </div>
+        </form>
       </div>
     </section>
   );

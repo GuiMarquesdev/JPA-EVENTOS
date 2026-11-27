@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { HeartHandshake, SlidersHorizontal } from 'lucide-react';
+import { ExternalLink, HeartHandshake, Music, Palette, SlidersHorizontal, Sparkles, Users } from 'lucide-react';
 import { BRAND_IMAGES, SOCIAL_LINKS, STORY_CHAPTERS } from '../data/jpaData';
 import { SafeImage } from './SafeImage';
 import { WhatsAppIcon } from './WhatsAppIcon';
@@ -133,9 +133,9 @@ export function StorySection({ onNavigate }: StorySectionProps) {
                 </p>
               </div>
               <div data-gsap="story-milestone">
-                <p className="font-display text-xl font-bold text-[#f58fc0]">Ascais</p>
+                <p className="font-display text-xl font-bold text-[#f58fc0]">Estripulia das Kas</p>
                 <p className="mt-1 text-xs sm:text-sm text-[#f3d9e6]">
-                  Estrepolia das Cais anima nossas festas há 7 anos com o mesmo carinho
+                  Parceria há 7 anos com a Tia K1 (@estripuliadaskas), levando Fit Dance Kids, recreação e chuva de espuma
                 </p>
               </div>
             </div>
@@ -168,6 +168,127 @@ export function StorySection({ onNavigate }: StorySectionProps) {
                 </p>
               </div>
             </TiltedCard>
+          </div>
+        </div>
+
+        {/* Dedicated Estripulia das Kas Partner Showcase */}
+        <div className="mt-14 p-6 sm:p-8 lg:p-10 bg-[#2b2437] border border-[#f58fc0]/30 rounded-[32px]">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+            <div className="lg:col-span-6">
+              <p className="text-xs sm:text-sm font-medium text-[#f58fc0] tracking-wide">
+                Parceria Oficial desde 2019 <span aria-hidden="true">·</span> @estripuliadaskas
+              </p>
+              <h3 className="mt-2 font-display text-2xl sm:text-3xl font-bold text-white leading-tight">
+                Estripulia das Kas: animação que transforma a festa!
+              </h3>
+              <p className="mt-3 text-sm sm:text-base text-[#f3d9e6] leading-relaxed">
+                Liderada pela animadora Tia K1 em Salvador, a equipe de animadores, atores e
+                recreadores da Estripulia das Kas caminha lado a lado com a JPA Eventos BA há sete
+                anos — unindo música, dança e brincadeiras criativas para crianças e famílias.
+              </p>
+
+              <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="p-4 rounded-[20px] bg-[#241f2e] border border-[#f3d9e6]/15">
+                  <div className="flex items-center gap-2 text-[#f58fc0]">
+                    <Music className="w-4 h-4 shrink-0" aria-hidden="true" />
+                    <p className="font-display text-sm font-bold text-white">Fit Dance Kids</p>
+                  </div>
+                  <p className="mt-1.5 text-xs text-[#f3d9e6] leading-relaxed">
+                    Coreografias infantis e hits musicais com comandos fáceis para animar toda a pista.
+                  </p>
+                </div>
+
+                <div className="p-4 rounded-[20px] bg-[#241f2e] border border-[#f3d9e6]/15">
+                  <div className="flex items-center gap-2 text-[#6ec6e3]">
+                    <Sparkles className="w-4 h-4 shrink-0" aria-hidden="true" />
+                    <p className="font-display text-sm font-bold text-white">Chuva de Espuma &amp; Neve</p>
+                  </div>
+                  <p className="mt-1.5 text-xs text-[#f3d9e6] leading-relaxed">
+                    Efeitos especiais divertidos no ponto alto da recreação que encantam a criançada.
+                  </p>
+                </div>
+
+                <div className="p-4 rounded-[20px] bg-[#241f2e] border border-[#f3d9e6]/15">
+                  <div className="flex items-center gap-2 text-[#f58fc0]">
+                    <Palette className="w-4 h-4 shrink-0" aria-hidden="true" />
+                    <p className="font-display text-sm font-bold text-white">Pintura Artística</p>
+                  </div>
+                  <p className="mt-1.5 text-xs text-[#f3d9e6] leading-relaxed">
+                    Traços delicados com tintas hipoalergênicas e modelos temáticos feitos na hora.
+                  </p>
+                </div>
+
+                <div className="p-4 rounded-[20px] bg-[#241f2e] border border-[#f3d9e6]/15">
+                  <div className="flex items-center gap-2 text-[#6ec6e3]">
+                    <Users className="w-4 h-4 shrink-0" aria-hidden="true" />
+                    <p className="font-display text-sm font-bold text-white">Pais &amp; Filhos Juntos</p>
+                  </div>
+                  <p className="mt-1.5 text-xs text-[#f3d9e6] leading-relaxed">
+                    Gincanas, brincadeiras lúdicas e hora do parabéns conduzida com leveza e carinho.
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-6 flex flex-wrap items-center gap-3">
+                <a
+                  href={SOCIAL_LINKS.estripuliaInstagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-5 py-3 text-sm font-semibold text-[#241f2e] bg-[#f58fc0] hover:bg-[#f26b9e] hover:text-white rounded-[22px] transition-colors"
+                >
+                  Ver @estripuliadaskas no Instagram
+                  <ExternalLink className="w-4 h-4" aria-hidden="true" />
+                </a>
+                <button
+                  type="button"
+                  onClick={() => onNavigate('toolcraft')}
+                  className="inline-flex items-center gap-2 px-4 py-3 text-sm font-semibold text-white bg-[#241f2e] border border-[#f3d9e6]/25 hover:border-[#6ec6e3] rounded-[22px] transition-colors cursor-pointer"
+                >
+                  <SlidersHorizontal className="w-4 h-4 text-[#6ec6e3]" aria-hidden="true" />
+                  Incluir na Minha Festa
+                </button>
+              </div>
+            </div>
+
+            <div className="lg:col-span-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="relative rounded-[24px] overflow-hidden border border-[#f3d9e6]/20 bg-[#241f2e] aspect-[4/5]">
+                <SafeImage
+                  src="/src/assets/images/hero_slide_1.jpg"
+                  alt="Tia K1 e equipe da Estripulia das Kas caracterizadas ao lado da mesa do bolo em festa infantil"
+                  className="w-full h-full object-cover object-[50%_38%]"
+                  fallbackTitle="Estripulia das Kas · Tia K1"
+                />
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-0 bg-gradient-to-t from-[#241f2e]/85 via-transparent to-transparent"
+                />
+                <div className="absolute bottom-0 inset-x-0 p-4">
+                  <p className="text-[11px] font-semibold text-[#f58fc0]">@estripuliadaskas</p>
+                  <p className="mt-0.5 font-display text-sm font-bold text-white">
+                    Tia K1 e animadoras caracterizadas
+                  </p>
+                </div>
+              </div>
+
+              <div className="relative rounded-[24px] overflow-hidden border border-[#f3d9e6]/20 bg-[#241f2e] aspect-[4/5]">
+                <SafeImage
+                  src="/src/assets/images/hero_slide_6.jpg"
+                  alt="Animadora da Estripulia das Kas conduzindo brincadeira com chuva de espuma em festa infantil em Salvador"
+                  className="w-full h-full object-cover object-[32%_45%]"
+                  fallbackTitle="Chuva de Espuma · Estripulia das Kas"
+                />
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-0 bg-gradient-to-t from-[#241f2e]/85 via-transparent to-transparent"
+                />
+                <div className="absolute bottom-0 inset-x-0 p-4">
+                  <p className="text-[11px] font-semibold text-[#6ec6e3]">Recreação ao Vivo</p>
+                  <p className="mt-0.5 font-display text-sm font-bold text-white">
+                    Chuva de espuma, dança e gincanas
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
