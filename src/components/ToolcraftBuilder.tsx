@@ -188,7 +188,7 @@ export function ToolcraftBuilder({
           <p className="text-xs font-semibold text-[#8b8691] mb-3">
             Comece rápido com um modelo sugerido (opcional):
           </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {TOOLCRAFT_PRESETS.map((preset) => (
               <button
                 key={preset.id}
@@ -205,6 +205,9 @@ export function ToolcraftBuilder({
                 <p className="mt-2.5 text-xs font-medium text-[#8b8691] tabular-nums">
                   {preset.itemIds.length} itens <span aria-hidden="true">·</span> {preset.guests}{' '}
                   pessoas <span aria-hidden="true">·</span> {preset.hours}h
+                  {preset.priceInfo && (
+                    <span className="text-[#f26b9e] font-semibold"> · {preset.priceInfo}</span>
+                  )}
                 </p>
               </button>
             ))}
@@ -427,6 +430,11 @@ export function ToolcraftBuilder({
                           )}
                         </div>
                         <p className="text-xs text-[#8b8691] mt-0.5">{item.subtitle}</p>
+                        {item.priceInfo && (
+                          <p className="text-[11px] font-medium text-[#f26b9e] mt-0.5">
+                            {item.priceInfo}
+                          </p>
+                        )}
                       </div>
 
                       <div className="flex items-center gap-2 shrink-0">
@@ -582,7 +590,7 @@ export function ToolcraftBuilder({
                   <p>
                     · {needsPowerCount}{' '}
                     {needsPowerCount === 1 ? 'estação selecionada exige' : 'estações selecionadas exigem'}{' '}
-                    tomada elétrica próxima ao local de montagem.
+                    tomada elétrica 127V próxima ao local de montagem (ou transformador sob consulta).
                   </p>
                 )}
                 {guests >= 60 && (

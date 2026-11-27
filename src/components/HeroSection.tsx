@@ -9,7 +9,7 @@ import {
   Star,
 } from 'lucide-react';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
-import { BRAND_IMAGES, SOCIAL_LINKS } from '../data/jpaData';
+import { BRAND_IMAGES, SERVICES_CATALOG, SOCIAL_LINKS } from '../data/jpaData';
 import { SafeImage } from './SafeImage';
 import { ImageLightbox } from './ImageLightbox';
 import {
@@ -1736,7 +1736,7 @@ export function HeroSection({ onNavigate }: HeroSectionProps) {
             </div>
             <div data-gsap="hero-stat">
               <p className="font-display text-2xl sm:text-3xl font-bold text-[#241f2e] tabular-nums">
-                <CountUp to={27} /> itens
+                <CountUp to={SERVICES_CATALOG.length} /> itens
               </p>
               <p className="mt-1 text-sm text-[#5c5868]">
                 Entre brinquedos, lanches ao vivo, equipe e balões

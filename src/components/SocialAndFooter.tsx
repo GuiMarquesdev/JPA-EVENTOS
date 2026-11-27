@@ -85,7 +85,8 @@ export function SocialAndFooter({ onNavigate }: SocialAndFooterProps) {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
           <div className="lg:col-span-6">
             <p className="text-xs sm:text-sm font-medium text-[#8b8691]">
-              Atendimento em Salvador, Bahia <span aria-hidden="true">·</span> Falar pelo WhatsApp
+              Atendimento em Salvador, Bahia <span aria-hidden="true">·</span> Contrato e Nota Fiscal{' '}
+              <span aria-hidden="true">·</span> Pix, Cartão, Débito, Espécie e Boleto mensal
             </p>
             <h2 className="mt-2 font-display text-2xl sm:text-3xl font-bold tracking-tight text-[#241f2e] text-balance">
               Pronto para reservar a sua data com a JPA Eventos BA?

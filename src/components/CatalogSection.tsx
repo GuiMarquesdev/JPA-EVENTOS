@@ -119,7 +119,7 @@ export function CatalogSection({
                   : 'text-[#5c5868] hover:text-[#241f2e]'
               }`}
             >
-              Todos (27)
+              Todos ({SERVICES_CATALOG.length})
             </button>
             {SERVICE_CATEGORIES.map((cat) => (
               <button
@@ -154,6 +154,13 @@ export function CatalogSection({
             />
           </div>
         </div>
+
+        <p className="mt-4 text-xs text-[#5c5868] leading-relaxed">
+          <span className="font-semibold text-[#241f2e]">Condições e operação:</span> Contrato e
+          Nota Fiscal · Pix, Crédito, Débito, Espécie e Boleto mensal · Barracas ao vivo em
+          127V (transformador sob consulta) e mínimo de 100 unid. (até 2 tipos da mesma classe) ·
+          Consultar frete acima de 8 km.
+        </p>
 
         {/* Category Visual Spotlight when filtered to 1 category */}
         {activeCategoryMeta && (
@@ -408,6 +415,12 @@ function ServiceProductCard({
           <h4 className="mt-2 font-display text-lg sm:text-xl font-bold text-[#241f2e] leading-snug">
             {item.name}
           </h4>
+
+          {item.priceInfo && (
+            <p className="mt-1.5 text-xs font-semibold text-[#f26b9e] leading-snug">
+              {item.priceInfo}
+            </p>
+          )}
 
           <p className="mt-2.5 text-sm text-[#5c5868] leading-relaxed">
             {item.description}
